@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SpinnerItemStyle" parent="@android:style/Widget.TextView.SpinnerItem">
+
+        <item name="android:layout_margin">10dp</item>
+
+
+
+    </style>
+
+    <style name="CommonTopDivider">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">4dp</item>
+        <item name="android:background">@drawable/common_top_divider</item>
+    </style>
+
+    <style name="MediumBlack20TextView">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+
+    <style name="TextInputLayoutWhiteTheme" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/neutral80Color</item>
+        <item name="android:textSize">15sp</item>
+        <item name="colorAccent">@color/neutral80Color</item>
+        <item name="colorControlNormal">@color/neutral80Color</item>
+        <item name="colorControlActivated">@color/neutral80Color</item>
+        <item name="android:textColorHighlight">@color/neutral80Color</item>
+        <item name="android:textColorLink">@color/neutral80Color</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="boxBackgroundMode">filled</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layoutDirection">locale</item>
+        <item name="android:colorActivatedHighlight">@color/neutral80Color</item>
+        <item name="android:activatedBackgroundIndicator">@color/neutral80Color</item>
+    </style>
+
+
+    <style name="TextInputLayoutEditTextTheme" parent="@android:style/Widget.EditText">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/neutral100Color</item>
+        <item name="android:textColorHint">@color/neutral80Color</item>
+
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/rectangle_edit_text_shap</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textDirection">locale</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="fontWeight">400</item>
+    </style>
+
+    <style name="LetsGetStartButton" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/round_app_intro_start_background</item>
+        <item name="android:backgroundTint">@color/gray</item>
+        <item name="android:paddingTop">@dimen/_8sdp</item>
+        <item name="android:paddingBottom">@dimen/_8sdp</item>
+        <item name="cornerRadius">@dimen/_32sdp</item>
+        <item name="fontWeight">600</item>
+    </style>
+
+
+
+    <!--Textview white 48 medium-->
+    <style name="MediumWhite48TextView" parent="TextView48Medium">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="TextView48Medium" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/font_36sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/worksans_bold</item>
+        <item name="android:textDirection">locale</item>
+        <item name="fontWeight">700</item>
+    </style>
+
+    <style name="Medium18Weight500TextView" parent="TextView18SP500">
+        <item name="android:textColor">@color/neutral100Color</item>
+    </style>
+
+    <!--Textview Black 18 weight 500 medium neutralColor100Opacity40-->
+    <style name="Medium18Weight500TextViewNeutralColor100Opacity40" parent="TextView18SP500">
+        <item name="android:textColor">@color/neutralColor100Opacity40</item>
+    </style>
+
+    <style name="TextView18SP500" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/font_18sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/worksans_medium</item>
+        <item name="android:textDirection">locale</item>
+        <item name="fontWeight">500</item>
+    </style>
+
+</resources>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MakeSure</string>
+    <string name="total_scan">Total Scan</string>
+    <string name="from">From</string>
+    <string name="getYourLabourJobsFast">Make Sure Your Company Name</string>
+    <string name="makeSureManufacture">Make Sure Your ManuFacture Name</string>
+    <string name="scan_case">Scan Child Barcode...</string>
+    <string name="try_to_scan_barcode">try to scan...</string>
+    <string name="scan_case_no">Scan Parent Barcode</string>
+    <string name="product_name">Product Name.</string>
+    <string name="dispatch_scanning">Dispatch Scanning</string>
+    <string name="re_aggregation">Re -Aggregation</string>
+    <string name="aggregation">Aggregation</string>
+    <string name="packaging_norms">Packaging Norms.</string>
+</resources>
