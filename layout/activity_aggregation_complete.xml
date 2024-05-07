@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/_45sdp"
+                android:visibility="visible">
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginHorizontal="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/custom_dialog_bg"
+                    android:elevation="@dimen/_4sdp"
+                    android:paddingStart="@dimen/_8sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/caeDetailsCv">
+
+
+                    <ImageView
+                        android:id="@+id/scan_case_image"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/barcode"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/scan_case_no_layout"
+                        style="@style/TextInputLayoutWhiteTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="@+id/scan_case_image"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/scan_case_image"
+                        app:layout_constraintTop_toTopOf="@+id/scan_case_image">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/scanNo"
+                            style="@style/TextInputLayoutWhiteTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Scan Parent Barcode....."
+                            android:textColorHint="@color/gray"
+                            android:textSize="@dimen/_12ssp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/errorLabeleCv"
+                    android:layout_width="0dp"
+                    android:elevation="@dimen/_5sdp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginHorizontal="@dimen/_2sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@drawable/custom_dialog_bg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+                    <TextView
+                        android:id="@+id/errorLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:gravity="center"
+                        android:padding="@dimen/_8sdp"
+                        android:text=""
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cdDivider"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:padding="@dimen/_1sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+                    app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_1ssp"
+                        android:background="@color/gray_border"
+                        app:layout_constraintBottom_toBottomOf="@+id/CaseDetailTv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/CaseDetailTv" />
+
+                    <TextView
+                        android:id="@+id/CaseDetailTv"
+                        android:layout_width="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text=" B R A N D   D E T A I  L S "
+                        android:textColor="@color/greyy"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/view1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1ssp"
+                        android:background="@color/gray_border"
+                        app:layout_constraintBottom_toBottomOf="@+id/CaseDetailTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/CaseDetailTv"
+                        app:layout_constraintTop_toTopOf="@+id/CaseDetailTv" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/caeDetailsCv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/_5sdp"
+                    android:background="@drawable/data_info_bg"
+                    android:elevation="@dimen/_5sdp"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_15sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+                    app:layout_constraintTop_toBottomOf="@+id/cdDivider">
+
+                    <TextView
+                        android:id="@+id/CaseNoTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:text="@string/product_name"
+                        android:textColor="@color/red_text_color"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/proName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Haywards 5000 Strong Premium Beer "
+                        android:textColor="@color/greyy"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="normal"
+                        app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/CaseNoTitle" />
+
+                    <View
+                        android:id="@+id/viewCn"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1ssp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:background="@color/gray_border"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/proName" />
+
+                    <TextView
+                        android:id="@+id/scanDnTTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="Child Pack Size"
+                        android:textColor="@color/red_text_color"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/viewCn" />
+
+                    <TextView
+                        android:id="@+id/packSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:text="12"
+                        android:textColor="@color/greyy"
+                        android:textSize="@dimen/_11ssp"
+                        android:textStyle="normal"
+                        app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/scanDnTTitle" />
+
+                    <View
+                        android:id="@+id/view3"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_1ssp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:background="@color/gray_border"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/packSize"
+                        app:layout_constraintTop_toBottomOf="@+id/packSize" />
+
+
+
+
+                    <TextView
+                        android:id="@+id/brandNameTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="Batch No."
+                        android:textColor="@color/red_text_color"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+                    <TextView
+                        android:id="@+id/label1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="782240"
+                        android:textColor="@color/greyy"
+                        android:textSize="@dimen/_11ssp"
+                        android:textStyle="normal"
+                        app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/brandNameTitle" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <include
+                    android:id="@+id/placeholder"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    layout="@layout/layout_aggrigation_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/errorLabeleCv" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+
+
+
+

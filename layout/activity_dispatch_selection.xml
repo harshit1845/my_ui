@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:background="@color/lightGray"
+       android:fillViewport="true">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@color/field_bg">
+
+
+         <TextView
+             android:id="@+id/normsText"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:layout_marginTop="10dp"
+             android:text="Select Dispatch Number"
+             android:textColor="@color/colorPrimary"
+             android:textSize="16sp"
+             android:textStyle="bold"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"/>
+
+
+         <ImageView
+             android:id="@+id/imageNoRecord"
+             android:layout_width="@dimen/_80sdp"
+             android:layout_height="@dimen/_80sdp"
+             android:padding="@dimen/_5sdp"
+             android:layout_marginTop="@dimen/_32sdp"
+             android:src="@drawable/batch_status"
+             android:visibility="gone"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintVertical_chainStyle="packed" />
+
+         <TextView
+             android:id="@+id/tvNoJob"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="@dimen/_1sdp"
+             android:text="Sorry!\nNo Record Found"
+             android:textColor="@color/colorPrimary"
+             android:textStyle="bold"
+             android:visibility="gone"
+             android:textAlignment="center"
+             app:layout_constraintLeft_toLeftOf="@+id/imageNoRecord"
+             app:layout_constraintRight_toRightOf="@+id/imageNoRecord"
+             app:layout_constraintTop_toBottomOf="@+id/imageNoRecord" />
+
+
+
+
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:id="@+id/cdDivider"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="@dimen/_15sdp"
+             android:padding="@dimen/_1sdp"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/normsText">
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_1ssp"
+                android:background="@color/gray_border"
+                app:layout_constraintBottom_toBottomOf="@+id/CaseDetailTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/CaseDetailTv" />
+
+            <TextView
+                android:id="@+id/CaseDetailTv"
+                android:layout_width="wrap_content"
+                android:padding="@dimen/_2sdp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=" D I S P A T C H   D E T A I  L S "
+                android:textColor="@color/greyy"
+                android:textSize="@dimen/_9ssp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_1ssp"
+                android:background="@color/gray_border"
+                app:layout_constraintBottom_toBottomOf="@+id/CaseDetailTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/CaseDetailTv"
+                app:layout_constraintTop_toTopOf="@+id/CaseDetailTv" />
+
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:id="@+id/caeDetailsCv"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_marginVertical="@dimen/_5sdp"
+             android:background="@drawable/data_info_bg"
+             android:elevation="@dimen/_5sdp"
+             android:paddingHorizontal="@dimen/_10sdp"
+             android:paddingBottom="@dimen/_15sdp"
+             android:layout_marginStart="@dimen/_10sdp"
+             android:layout_marginEnd="@dimen/_10sdp"
+             app:layout_constraintHorizontal_bias="0.0"
+             app:layout_constraintTop_toBottomOf="@+id/cdDivider"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             >
+
+
+
+
+            <TextView
+                android:id="@+id/CaseNoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:text="Product Name."
+                android:textColor="@color/red_text_color"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/product_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/greyy"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CaseNoTitle" />
+
+            <View
+                android:id="@+id/viewCn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_1ssp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/gray_border"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_name" />
+
+
+            <TextView
+                android:id="@+id/batch_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:text="Batch No.."
+                android:textColor="@color/red_text_color"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewCn" />
+
+            <TextView
+                android:id="@+id/batch_dt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/greyy"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/batch_no" />
+
+            <View
+                android:id="@+id/viewCnn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_1ssp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/gray_border"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_name" />
+
+
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+         <androidx.recyclerview.widget.RecyclerView
+             android:id="@+id/recyclerView"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:listitem="@layout/dispatch_item"
+             app:layout_constraintTop_toBottomOf="@+id/caeDetailsCv"/>
+
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+   </ScrollView>
+
+
+</layout>
+

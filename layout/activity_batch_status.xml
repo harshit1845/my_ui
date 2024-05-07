@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/field_bg">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".batchInfo.BatchStatus"
+            >
+
+
+            <ImageView
+                android:id="@+id/imageNoRecord"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_32sdp"
+                android:src="@drawable/batch_status"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tvNoJob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:text="Please Select \nProduct From Dropdown "
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                app:layout_constraintLeft_toLeftOf="@+id/imageNoRecord"
+                app:layout_constraintRight_toRightOf="@+id/imageNoRecord"
+                app:layout_constraintTop_toBottomOf="@+id/imageNoRecord" />
+
+
+            <TextView
+                android:id="@+id/tvAGoToFindJob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_32sdp"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tvNoJob"
+                app:layout_constraintStart_toStartOf="@+id/tvNoJob"
+                app:layout_constraintTop_toBottomOf="@+id/tvNoJob" />
+
+
+            <TextView
+                android:id="@+id/companyN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/_12sdp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/productSp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_margin="@dimen/_16sdp"
+                android:hint="Select Product"
+                app:layout_constraintTop_toBottomOf="@+id/companyN"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompletesp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_43sdp"
+                    android:singleLine="false"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/searchh"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginHorizontal="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:background="@drawable/custom_dialog_bg"
+                android:elevation="@dimen/_4sdp"
+                android:paddingStart="@dimen/_8sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productSp">
+
+
+                <ImageView
+                    android:id="@+id/scan_case_image"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_search_jobs"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/search"
+                    style="@style/TextInputLayoutWhiteTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/scan_case_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/scan_case_image"
+                    app:layout_constraintTop_toTopOf="@+id/scan_case_image">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/searchBatch"
+                        style="@style/TextInputLayoutWhiteTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Search Batch....."
+                        android:textColorHint="@color/gray"
+                        android:textSize="@dimen/_12ssp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/search"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_25sdp"-->
+<!--                android:drawableEnd="@drawable/ic_search_jobs"-->
+<!--                android:layout_marginStart="@dimen/_13sdp"-->
+<!--                android:drawablePadding="@dimen/_1sdp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/productSp"-->
+<!--                android:hint="Search Batch No..."-->
+<!--                android:textSize="@dimen/_12sdp"-->
+<!--                android:paddingLeft="@dimen/_7sdp"-->
+<!--                android:paddingRight="@dimen/_7sdp"-->
+<!--                android:layout_marginEnd="@dimen/_13sdp"-->
+<!--                android:background="@drawable/rectangle_edit_text_shap">-->
+
+<!--            </com.google.android.material.textfield.TextInputEditText>-->
+
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/recycler_view"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/batch_status_selection"
+                    app:layout_constraintTop_toBottomOf="@+id/searchh"
+                    />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </ScrollView>
+
+</layout>

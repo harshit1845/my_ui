@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".batchInfo.BatchInformation">
+
+    <TextView
+        android:id="@+id/batchDetails_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Batch Details"
+        android:textStyle="bold"
+        android:textSize="@dimen/_15sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+
+
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cdDivider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:padding="@dimen/_1sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/batchDetails_txt">
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_1ssp"
+            android:background="@color/gray_border"
+            app:layout_constraintBottom_toBottomOf="@+id/CaseDetailTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/CaseDetailTv" />
+
+        <TextView
+            android:id="@+id/CaseDetailTv"
+            android:layout_width="wrap_content"
+            android:padding="@dimen/_2sdp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=" B A T C H   D E T A I  L S "
+            android:textColor="@color/greyy"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1ssp"
+            android:background="@color/gray_border"
+            app:layout_constraintBottom_toBottomOf="@+id/CaseDetailTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/CaseDetailTv"
+            app:layout_constraintTop_toTopOf="@+id/CaseDetailTv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/caeDetailsCv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/_5sdp"
+        android:background="@drawable/data_info_bg"
+        android:elevation="@dimen/_5sdp"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_15sdp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/cdDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/CaseNoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:text="Batch No."
+            android:textColor="@color/red_text_color"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/bNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Haywards 5000 Strong Premium Beer "
+            android:textColor="@color/greyy"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+            app:layout_constraintTop_toBottomOf="@+id/CaseNoTitle" />
+
+        <View
+            android:id="@+id/viewCn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1ssp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@color/gray_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bNo" />
+
+        <TextView
+            android:id="@+id/scanDnTTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="Batch Id"
+            android:textColor="@color/red_text_color"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewCn" />
+
+        <TextView
+            android:id="@+id/bId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:text="12"
+            android:textColor="@color/greyy"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+            app:layout_constraintTop_toBottomOf="@+id/scanDnTTitle" />
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1ssp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@color/gray_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bId"
+            app:layout_constraintTop_toBottomOf="@+id/bId" />
+
+
+        <TextView
+            android:id="@+id/brandNameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="Status"
+            android:textColor="@color/red_text_color"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+        <TextView
+            android:id="@+id/st"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="782240"
+            android:textColor="@color/greyy"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+            app:layout_constraintTop_toBottomOf="@+id/brandNameTitle" />
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1ssp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@color/gray_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/st"
+            app:layout_constraintTop_toBottomOf="@+id/st" />
+
+
+        <TextView
+            android:id="@+id/packTypeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:text="Packaging Level"
+            android:textColor="@color/red_text_color"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+        <TextView
+            android:id="@+id/pLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:hint="each"
+            android:textColor="@color/greyy"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+            app:layout_constraintTop_toBottomOf="@+id/packTypeTitle" />
+
+
+
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1ssp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@color/gray_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/pLevel"
+            app:layout_constraintTop_toBottomOf="@+id/pLevel" />
+
+
+        <TextView
+            android:id="@+id/packTypeTitlee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:text="Batch Size"
+            android:textColor="@color/red_text_color"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view5" />
+
+        <TextView
+            android:id="@+id/bSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:hint="each"
+            android:textColor="@color/greyy"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+            app:layout_constraintTop_toBottomOf="@+id/packTypeTitlee" />
+
+
+        <View
+            android:id="@+id/view6"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1ssp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@color/gray_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bSize"
+            app:layout_constraintTop_toBottomOf="@+id/bSize" />
+
+
+        <TextView
+            android:id="@+id/expt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:text="Exp Date"
+            android:textColor="@color/red_text_color"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+        <TextView
+            android:id="@+id/exp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:hint="each"
+            android:textColor="@color/greyy"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/scanDnTTitle"
+            app:layout_constraintTop_toBottomOf="@+id/expt" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    <!--    <TableLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:paddingLeft="5dp"-->
+<!--        android:paddingRight="5dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/batchDetails_txt">-->
+
+<!--        <TableRow android:background="#FFFFFF" android:padding="5dp">-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:textStyle="bold"-->
+<!--                android:text="Batch Number: " />-->
+<!--            <TextView-->
+<!--                android:id="@+id/bNo"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                />-->
+
+<!--        </TableRow>-->
+
+<!--        <TableRow android:background="#D3D3D3" android:padding="10dp">-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:textStyle="bold"-->
+<!--                android:text="Batch ID" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/bId"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                />-->
+
+<!--        </TableRow>-->
+
+<!--        <TableRow android:background="#FFFFFF" android:padding="5dp">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textStyle="bold"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Status:" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/st"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                />-->
+
+<!--        </TableRow>-->
+
+<!--        <TableRow android:background="#D3D3D3" android:padding="5dp">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textStyle="bold"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Expire Date" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/exp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                />-->
+
+<!--        </TableRow>-->
+
+<!--        <TableRow android:background="#FFFFFF" android:padding="10dp">-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textStyle="bold"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Packaging Level :" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/pLevel"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                />-->
+
+<!--        </TableRow>-->
+<!--        <TableRow android:background="#D3D3D3" android:padding="5dp">-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textStyle="bold"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Batch Size :" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/bSize"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                />-->
+
+<!--        </TableRow>-->
+
+
+<!--&lt;!&ndash;        <TableRow android:background="#D3D3D3" android:padding="5dp">&ndash;&gt;-->
+<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textStyle="bold"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:text="Batch Size :" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/gtin"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        </TableRow>&ndash;&gt;-->
+
+<!--    </TableLayout>-->
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
