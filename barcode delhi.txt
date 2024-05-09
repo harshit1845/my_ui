@@ -1,0 +1,21 @@
+0
+8906013
+00023
+1
+0000044003
+
+
+
+
+identifier 0or1           1 digit
+industrycode 8906013      7 digit
+code  00023               5 digit
+checkCheck                1 digit
+
+uniq_number               10 digit
+
+
+(01)08901556000006(21)1987654321
+
+
+

@@ -1,0 +1,513 @@
+package project.standroid.delhiexsice;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.text.InputType;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mysql.jdbc.Statement;
+
+import org.json.JSONArray;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class createCase extends AppCompatActivity {
+    SharedPreferences sharedPreferences;
+    String sqlips, sqlports, sqldatabases, sqlusernames, sqlpasswords;
+    TextView label1, label4, case_pallete_label;
+    EditText scanHG;
+    ArrayList ScannedArray ,scannedArray;
+    TextView errorLabel;
+    private RecyclerView recyclerView;
+    Button CLEARBUTTON;
+    ProgressBar progressBar;
+    private Connection connection = null;
+    Intent intent;
+    String BrandId,brandName,etin,package_type,size,packSize,brandType,industry_code,Mfg_dt,Batch_no,Label1,Label4,strength,plant_id,industry_type,code,gtinNumber;
+    String scanHgs,scanHgss = "";
+    String case_id, Brand_ETIN = "", Etin_, State_with_, Unit_id_, digit_date_, mapped_, Per_size_Case_, Date_from_case;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    int sizearray;
+     String activitys;
+     String CurrentDateTime;
+    String plantidd;
+    String caseid;
+     String duplicateCaseid,productId,sr_no,batch_id;
+    TextView sizee,brandNmee,packSizeee,etinnn,brandTypee,mfgDatee,batchvaluee;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_case);
+
+        label4 = findViewById(R.id.label4);
+        scanHG = findViewById(R.id.scanHG);
+        errorLabel = findViewById(R.id.errorLabel);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        CLEARBUTTON = findViewById(R.id.clearbtn);
+        progressBar = findViewById(R.id.ProgressBar);
+        sizee = findViewById(R.id.size);
+        brandNmee = findViewById(R.id.brandNme);
+        packSizeee = findViewById(R.id.packSize);
+        etinnn = findViewById(R.id.etinn);
+        mfgDatee = findViewById(R.id.mfgDate);
+        batchvaluee = findViewById(R.id.batchvalue);
+
+        ScannedArray = new ArrayList();
+        scannedArray = new ArrayList();
+        sharedPreferences = getSharedPreferences("SQLSERVER", Context.MODE_PRIVATE);
+        sqlips = sharedPreferences.getString("sqlip", "");
+        sqlports = sharedPreferences.getString("sqlports", "");
+        sqlusernames = sharedPreferences.getString("sqlusernames", "");
+        sqlpasswords = sharedPreferences.getString("sqlpasswords", "");
+        sqldatabases = sharedPreferences.getString("sqldatabases", "");
+        intent = getIntent();
+        BrandId = intent.getStringExtra("BrandId");
+        System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"+BrandId);
+        brandName = intent.getStringExtra("brandName");
+        etin = intent.getStringExtra("etin");
+        package_type = intent.getStringExtra("package_type");
+        size = intent.getStringExtra("size");
+        packSize = intent.getStringExtra("packSize");
+        brandType = intent.getStringExtra("brandType");
+        industry_code = intent.getStringExtra("industry_code");
+        strength = intent.getStringExtra("strength");
+        plant_id = intent.getStringExtra("plant_id");
+        industry_type = intent.getStringExtra("industry_type");
+        Mfg_dt = intent.getStringExtra("Mfg_dt");
+        Batch_no = intent.getStringExtra("Batch_no");
+        Label1 = intent.getStringExtra("Label1");
+        Label4 = intent.getStringExtra("Label4");
+        activitys = intent.getStringExtra("activities");
+        code  = intent.getStringExtra("code");
+        batch_id  = intent.getStringExtra("batch_id");
+       // label1.setText(Label1);
+        sizee.setText(intent.getStringExtra("size")+"ml");
+        brandNmee.setText(intent.getStringExtra("brandName"));
+        packSizeee.setText(intent.getStringExtra("packSize"));
+        etinnn.setText(intent.getStringExtra("etn"));
+       // brandTypee.setText(intent.getStringExtra("brdType"));
+        mfgDatee.setText(intent.getStringExtra("Mfg_dt"));
+        batchvaluee.setText(batch_id);
+
+        //event on edit text when barcode scan
+        scanHG.requestFocus();
+        scanHG.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int inType = scanHG.getInputType(); // backup the input type
+                scanHG.setInputType(InputType.TYPE_NULL); // disable soft input
+                scanHG.onTouchEvent(event); // call native handler
+                scanHG.setInputType(inType); // restore input type
+                return true; // consume touch even
+            }
+        });
+
+      scanHG.setOnKeyListener(new View.OnKeyListener() {
+          @Override
+          public boolean onKey(View v, int keyCode, KeyEvent event) {
+// validations and error handling
+             try{
+                 if ((keyCode == EditorInfo.IME_ACTION_SEARCH ||
+                         keyCode == EditorInfo.IME_ACTION_DONE ||
+                         keyCode == EditorInfo.IME_ACTION_SEND ||
+                         keyCode == EditorInfo.IME_ACTION_GO ||
+                         keyCode == EditorInfo.IME_MASK_ACTION ||
+                         (event.getAction() == KeyEvent.ACTION_DOWN) &&
+                                 (keyCode == KeyEvent.KEYCODE_ENTER)) &&
+                         !event.isShiftPressed()) {
+                     if (keyCode != KeyEvent.KEYCODE_BACK) {
+
+                         scanHgs = scanHG.getText().toString().trim();
+
+                         System.out.println("caseLength:" + scanHgs.length());
+                         System.out.println("case:" + scanHgs);
+                         if (scanHgs.length() == 28) {
+                             String prefix = scanHgs.substring(0, 2);
+                             String gtin = scanHgs.substring(2, 16);
+                             String groupSeparator = scanHgs.substring(16, 18);
+                             caseid = scanHgs.substring(18, 28);
+                             if (!ScannedArray.contains(scanHgs)) {
+                                 new validateHologramPlantId(caseid).execute();
+                                 System.out.println("Prefix: " + prefix);
+                                 System.out.println("GTIN: " + gtin);
+                                 System.out.println("Group Separator: " + groupSeparator);
+                                 System.out.println("Case ID: " + caseid);
+                             } else {
+                                 errorLabel.setText("Already Scan\n" + scanHgs);
+                                 errorLabel.setBackgroundResource(R.color.red);
+                                 Helpers.ScanError();
+                                 scanHG.setText("");
+                                 Toast.makeText(createCase.this, "Already Scan", Toast.LENGTH_LONG).show();
+                             }
+
+
+                         } else {
+                             errorLabel.setText("Barcode Length Invalid\n" + scanHgs);
+                             errorLabel.setBackgroundResource(R.color.red);
+                             Helpers.ScanError();
+                             scanHG.setText("");
+                         }
+                     }
+                 }
+             }catch (Exception e){
+                 e.printStackTrace();
+                 errorLabel.setText(e.getMessage());
+             }
+
+
+              return false;
+          }
+      });
+      new getServerTimePostRequest("select now()").execute();
+
+    }
+
+
+//adapter for recycler view item to set value on list
+    public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> { // adapter for recyclerview
+        private ArrayList mDataset;
+        int index;
+
+        // Provide a reference to the views for each data item
+        // Complex data items may need more than one view per item, and
+        // you provide access to all the views for a data item in a view holder
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            // each data item is just a string in this case
+            public TextView textView;
+
+            public MyViewHolder(TextView v) {
+                super(v);
+                textView = v;
+            }
+        }
+
+        // Provide a suitable constructor (depends on the kind of dataset)
+        public MyAdapter(ArrayList myDataset) {
+            mDataset = myDataset;
+        }
+
+        // Create new views (invoked by the layout manager)
+        @Override
+        public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            // create a new view
+            TextView v = (TextView) LayoutInflater.from(parent.getContext())
+                    .inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+
+            MyAdapter.MyViewHolder vh = new MyAdapter.MyViewHolder(v);
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(MyAdapter.MyViewHolder holder, int position) {
+
+
+            holder.textView.setText("HG ID : " + mDataset.get(position).toString());
+            holder.textView.setBackgroundResource(R.drawable.row_border);
+
+
+        }
+
+     // Return the size of your dataset (invoked by the layout manager)
+        @Override
+        public int getItemCount() {
+            return mDataset.size();
+        }
+    }
+    //send data on CreateScanCase screen
+    public void SendData() { // function used to send the intent with data
+        Intent intent = new Intent(createCase.this, CreateScanCase.class);
+        intent.putExtra("BrandId", BrandId);
+        intent.putExtra("brandName", brandName);
+        intent.putExtra("etin", etin);
+        intent.putExtra("package_type", package_type);
+        intent.putExtra("size", size);
+        intent.putExtra("packSize", packSize);
+        intent.putExtra("brandType", brandType);
+        intent.putExtra("industry_code", industry_code);
+        intent.putExtra("strength", strength);
+        intent.putExtra("plant_id", plant_id);
+        intent.putExtra("Mfg_dt", Mfg_dt);
+        intent.putExtra("BrandId", BrandId);
+        intent.putExtra("NoOfBottles", packSize);
+        intent.putExtra("Batch_no", Batch_no);
+        intent.putExtra("ScannedArray", scannedArray);
+        intent.putExtra("Label1", Label1);
+        intent.putExtra("activities",activitys);
+        intent.putExtra("CurrentDateTime", CurrentDateTime);
+        intent.putExtra("code", code);
+        startActivity(intent);
+    }
+
+    private class getServerTimePostRequest extends AsyncTask<String, Integer, String> {
+        String query;
+
+        public getServerTimePostRequest(String query){
+            this.query=query;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String url = "jdbc:mysql://" + sqlips + ":" + sqlports + "/" + sqldatabases+"?autoReconnect=true&useSSL=false";
+                ActivityCompat.requestPermissions(createCase.this, new String[]{Manifest.permission.INTERNET}, PackageManager.PERMISSION_GRANTED);
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                try {
+                    ArrayList<String> printer = new ArrayList<>();
+                    String printerData = null;
+                    Class.forName(Config.Classes);
+                    connection = DriverManager.getConnection(url, sqlusernames, sqlpasswords);
+                    Statement statement = (Statement) connection.createStatement();
+                    ResultSet result = statement.executeQuery(query);
+
+                    while (result.next()) {
+                        CurrentDateTime = result.getString("now()");
+
+                    }
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+
+    //check barcode validation from table
+    public class validateHologramPlantId extends AsyncTask<String, Integer, String> {
+        String queryy,query="";
+        String error;
+        String caseNooo;
+        int row=0;
+        ArrayList<String> duplicatePlant;
+
+        public validateHologramPlantId(String caseNooo){
+            this.caseNooo=caseNooo;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            System.out.println("mmmmmmmm"+caseNooo);
+
+            duplicatePlant = new ArrayList<>();
+
+            try {
+                String url = "jdbc:mysql://" + sqlips + ":" + sqlports + "/" + sqldatabases+"?autoReconnect=true&useSSL=false";
+                ActivityCompat.requestPermissions(createCase.this, new String[]{Manifest.permission.INTERNET}, PackageManager.PERMISSION_GRANTED);
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                try {
+
+                    Class.forName(Config.Classes);
+                    connection = DriverManager.getConnection(url, sqlusernames, sqlpasswords);
+                    Statement statement = (Statement) connection.createStatement();
+
+                    String sanitizedBarcode = caseNooo.trim();
+
+
+                    query = "select * from um_barcodes where sr_no='" + sanitizedBarcode + "'";
+                    ResultSet result = statement.executeQuery(query);
+                    System.out.println("mmmmmmmm"+result.getFetchSize());
+
+                    while (result.next()) {
+                        row = result.getRow();
+                        plantidd = result.getString("plant_id");
+                        duplicateCaseid = result.getString("case_id");
+                        productId = result.getString("product_id");
+                        sr_no = result.getString("sr_no");
+                    }
+
+                    System.out.println("query"+query);
+                    System.out.println("duplicateCaseid"+duplicateCaseid);
+                    System.out.println("row"+row);
+                    System.out.println("plantidd"+plantidd);
+                    System.out.println("duplicatePlant"+duplicatePlant.size());
+                    System.out.println("duplicatePlant"+duplicatePlant);
+                    System.out.println("plant_id"+plant_id);
+                    System.out.println("duplicatePlant"+duplicatePlant.contains(plant_id));
+                    System.out.println("bbbbb"+BrandId);
+                    System.out.println("pppp"+productId);
+                    System.out.println("sr_no"+sr_no);
+
+                    if (sr_no ==null){
+                        error = "Invalid Barcode";
+                    }
+                    else {
+
+                        if (!BrandId.equals(productId))
+                        {
+                            error = "product mismatch";
+                        }
+                        else {
+
+                        if (duplicateCaseid != null) {
+
+                            error = "Duplicate Hologram Found";
+
+                        } else {
+                            if (Integer.parseInt(plantidd) != Integer.parseInt(plant_id)) {
+                                error = "Plant Id Mismatched1";
+
+                            } else {
+                                error = "Success";
+
+                            }
+                        }
+                        }
+                        sr_no = null;
+                    }
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.getMessage();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return error;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressBar.setVisibility(View.GONE);
+            System.out.println("mess"+s);
+          if(s.equals("Plant Id Mismatched")){
+                errorLabel.setText("Plant Id Mismatched");
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                scanHG.requestFocus();
+                scanHG.setText("");
+            }else if(s.equals("Plant Id Mismatched1")){
+                errorLabel.setText("Plant Id Mismatched");
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                scanHG.requestFocus();
+                scanHG.setText("");
+
+            }
+          else if(s.equals("Invalid Barcode")) {
+              errorLabel.setText("Invalid Barcode");
+              errorLabel.setBackgroundResource(R.color.red);
+              Helpers.ScanError();
+              scanHG.requestFocus();
+              scanHG.setText("");
+              sr_no = null;
+          }
+
+          else if(s.equals("product mismatch")) {
+              errorLabel.setText("Product Mismatch\n"+scanHgs);
+              errorLabel.setBackgroundResource(R.color.red);
+              Helpers.ScanError();
+              scanHG.requestFocus();
+              scanHG.setText("");
+          }
+          else if(s.equals("Success")){
+                if (!ScannedArray.contains(scanHgs)) {
+                    Collections.reverse(ScannedArray);
+                    ScannedArray.add(scanHgs);
+                    scannedArray.add(caseid);
+
+                    Collections.reverse(ScannedArray);
+                    //Toast.makeText(CreateCase.this, "Valid barcode", Toast.LENGTH_SHORT).show();
+                    scanHG.setText("");
+                    label4.setText("Total Scan "+ScannedArray.size() + " From " + packSize);
+                    recyclerView.setHasFixedSize(true);
+                    layoutManager = new LinearLayoutManager(createCase.this);
+                    recyclerView.setLayoutManager(layoutManager);
+                    mAdapter = new MyAdapter(ScannedArray);
+                    recyclerView.setAdapter(mAdapter);
+                    errorLabel.setText("Valid barcode");
+                    errorLabel.setBackgroundResource(R.color.colorGreen);
+
+
+                    Helpers.ScanOk();
+                    if (ScannedArray.size() == Integer.parseInt(packSize)) {
+                        errorLabel.setText(packSize + "Hologram scanning Completed");
+                        errorLabel.setBackgroundResource(R.color.colorGreen);
+                        Helpers.ScanOk();
+                        //Toast.makeText(CreateCase.this, NoOfBottles + " Hologram scanning Completed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(createCase.this, "Please scan the case no.", Toast.LENGTH_SHORT).show();
+                        //scanNo.setEnabled(true);
+                        scanHG.setEnabled(false);
+
+                          SendData();
+                        //scanNo.requestFocus();
+                    }
+                }
+            }else if(s.equals("Duplicate Hologram Found")){
+              errorLabel.setText("Duplicate Barcode\n"+scanHgs);
+              errorLabel.setBackgroundResource(R.color.red);
+              Helpers.ScanError();
+              scanHG.requestFocus();
+              scanHG.setText("");
+          }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+}

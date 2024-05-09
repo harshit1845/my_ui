@@ -1,0 +1,15 @@
+
+select user
+forgetPassword
+companyInfo
+productbind
+batchbind
+packeginginfo
+getcount(parent,child )
+bulkAggregationInsert
+DispatchInfo
+caseCount ParentInfo
+DispatchDetailsInfo
+trackTraceBarcodeDeatails
+aggregation_valid
+actionlogInsert

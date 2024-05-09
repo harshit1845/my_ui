@@ -1,0 +1,667 @@
+package project.standroid.delhiexsice;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.text.InputType;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.mysql.jdbc.Statement;
+
+import org.json.JSONArray;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+public class Dispatch extends AppCompatActivity {
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    JSONArray parentArray;
+    String DispID,  BrandID, ScannedData,SelectedTypes,showCaseNo = "",warehouse,caseQ,formattedDateTime,disNo,brand,pack,mf,packinggCode,manufId,last18Digits;
+    EditText batchNo;
+    TextView label1,errorLabel,label5;
+    SharedPreferences sharedpreferences;
+    SharedPreferences.Editor editor;
+    Button CLEARBUTTON;
+    private long mRequestStartTime;
+    private Connection connection = null;
+    SharedPreferences sharedPreferences;
+    String sqlips, sqlports, sqldatabases, sqlusernames, sqlpasswords, leng,plant_id;
+    ProgressBar progressBar;
+    String industryCode,activitys;
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    // initialization
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dispatch);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Dispatch");
+
+        // initialization
+        batchNo = findViewById(R.id.batchNo);
+        label1 = findViewById(R.id.label1);
+        label5 = findViewById(R.id.label5);
+        errorLabel = findViewById(R.id.errorLabel);
+        CLEARBUTTON = findViewById(R.id.clearbtn);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        progressBar = findViewById(R.id.ProgressBar);
+
+        // getting data from the other activity
+        Intent intent = getIntent();
+        DispID = intent.getStringExtra("DispatchId");
+        caseQ = intent.getStringExtra("cQ");
+        BrandID = intent.getStringExtra("bId");
+        disNo = intent.getStringExtra("dno");
+        industryCode = intent.getStringExtra("industryCode");
+        activitys = intent.getStringExtra("activitys");
+        plant_id = intent.getStringExtra("plant_id");
+
+        // getting data from shared preference
+
+        sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedpreferences.edit();
+        SelectedTypes = sharedpreferences.getString("SelectedType", "foreign liquor");
+        sharedPreferences = getSharedPreferences("SQLSERVER", Context.MODE_PRIVATE);
+        sqlips = sharedPreferences.getString("sqlip", "");
+        sqlports = sharedPreferences.getString("sqlports", "");
+        sqlusernames = sharedPreferences.getString("sqlusernames", "");
+        sqlpasswords = sharedPreferences.getString("sqlpasswords", "");
+        sqldatabases = sharedPreferences.getString("sqldatabases", "");
+
+        batchNo.requestFocus();
+
+
+        // used for blocking the keyboard
+        // for mc 36 and tc 21
+        batchNo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int inType = batchNo.getInputType(); // backup the input type
+                batchNo.setInputType(InputType.TYPE_NULL); // disable soft input
+                batchNo.onTouchEvent(event); // call native handler
+                batchNo.setInputType(inType); // restore input type
+                return true; // consume touch even
+            }
+        });
+
+        batchNo.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                try{
+                    if ((keyCode == EditorInfo.IME_ACTION_SEARCH ||
+                            keyCode == EditorInfo.IME_ACTION_DONE ||
+                            keyCode == EditorInfo.IME_ACTION_SEND ||
+                            keyCode == EditorInfo.IME_ACTION_GO ||
+                            keyCode == EditorInfo.IME_MASK_ACTION ||
+                            (event.getAction() == KeyEvent.ACTION_DOWN) &&
+                                    (keyCode == KeyEvent.KEYCODE_ENTER)) &&
+                            !event.isShiftPressed()) {
+                        ScannedData = batchNo.getText().toString().trim().replace(" ", "").replace("@", "");
+
+                        showCaseNo = ScannedData;
+                        mRequestStartTime = System.currentTimeMillis();
+                        if (keyCode != KeyEvent.KEYCODE_BACK) {
+                            if (ScannedData.length() == 20) { // Ensure ScannedData has at least 18 characters
+                                 last18Digits = ScannedData.startsWith("90") ? ScannedData.substring(2) : ScannedData; // Extract last 18 digits
+
+                                    AddCase(last18Digits, DispID, BrandID); // Insert last 18 digits into the table
+
+                            } else {
+                                // Handle case when ScannedData has less than 18 characters
+                                batchNo.setText("");
+                                errorLabel.setText("Invalid barcode: " + ScannedData);
+                                errorLabel.setBackgroundResource(R.color.red);
+                                Helpers.ScanError();
+                                Toast.makeText(Dispatch.this, "Scanned data must be at least 18 characters long", Toast.LENGTH_LONG).show();
+                            }
+
+                    }
+                    }
+                }
+                catch (Exception ex){
+                }
+                return false;
+            }
+        });
+
+        loadList(DispID);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void AddCase(String Caseno, String DispID,String BrandId) {
+
+        new AddCasePostRequest(Caseno,DispID,BrandId).execute(); // working with php api for case dispatch
+
+    }
+
+    public static class GetCurrentDateTime {
+
+        public static Date getCurrentDateTime() {
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
+            return currentDate;
+        }
+    }
+
+    public void loadList(String DispID) { // used for loading the list
+        String query = "";
+        if (activitys.equals("mapped")) {
+            query = "SELECT DISTINCT case_no as cas FROM case_details WHERE dispatch_id = '"+DispID+"' ";
+        } else {
+            query = "SELECT DISTINCT case_no as cas FROM um_case_details WHERE dispatch_id = '"+DispID+"' ";
+        }
+        //loadPrintersPostRequest("select", query, "ip");
+        //  loadPrintersPostRequest(query);
+        new loadPrintersPostRequest(query).execute();
+    }
+
+
+    public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> { //adapter for recyclerview
+        private String[] mDataset;
+        int index;
+
+        // Provide a reference to the views for each data item
+        // Complex data items may need more than one view per item, and
+        // you provide access to all the views for a data item in a view holder
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            // each data item is just a string in this case
+            public TextView textView;
+
+            public MyViewHolder(TextView v) {
+                super(v);
+                textView = v;
+            }
+        }
+
+        // Provide a suitable constructor (depends on the kind of dataset)
+        public MyAdapter(String[] myDataset) {
+            mDataset = myDataset;
+        }
+
+        // Create new views (invoked by the layout manager)
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            // create a new view
+            TextView v = (TextView) LayoutInflater.from(parent.getContext())
+                    .inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+
+            MyViewHolder vh = new MyViewHolder(v);
+            return vh;
+        }
+
+        // Replace the contents of a view (invoked by the layout manager)
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            // - get element from your dataset at this position
+            // - replace the contents of the view with that element
+
+            holder.textView.setText(mDataset[position]);
+            holder.textView.setBackgroundResource(R.drawable.row_border);
+        }
+        // Return the size of your dataset (invoked by the layout manager)
+        @Override
+        public int getItemCount() {
+            return mDataset.length;
+        }
+    }
+
+///////////////////////////////////////////SQLJDBC/////////////////////////////////////////////
+
+    ArrayList<String> printers = new ArrayList<>();
+    private class loadPrintersPostRequest extends AsyncTask<String, Integer, String> {
+
+        String query;
+        String [] stockArr;
+        String msg;
+
+        public loadPrintersPostRequest(String query){
+            this.query=query;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String url = "jdbc:mysql://" + sqlips + ":" + sqlports + "/" + sqldatabases;
+            ActivityCompat.requestPermissions(Dispatch.this, new String[]{Manifest.permission.INTERNET}, PackageManager.PERMISSION_GRANTED);
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            try {
+                String printer = null;
+                Class.forName(Config.Classes);
+                connection = DriverManager.getConnection(url, sqlusernames, sqlpasswords);
+                Statement statement = (Statement) connection.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                printers.clear();
+                while(result.next()){
+                    printer = result.getString("cas");
+                    printers.add(printer);
+                }
+
+                if (printers.size() >= 0) {
+                    // use this setting to improve performance if you know that changes
+                    // in content do not change the layout size of the RecyclerView
+                    msg = "availble";
+
+                }else{
+                    msg = "Not availble";
+
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            return msg;
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            System.out.println("MMMMM"+msg);
+            if(msg.equals("availble")){
+                recyclerView.setHasFixedSize(true);
+                // use a linear layout manager
+                layoutManager = new LinearLayoutManager(Dispatch.this);
+                recyclerView.setLayoutManager(layoutManager);
+                stockArr = printers.toArray(new String[0]);
+
+                // specify an adapter (see also next example)
+                Collections.reverse(Arrays.asList(stockArr));
+                progressBar.setVisibility(View.GONE);
+                mAdapter = new MyAdapter(stockArr);
+                recyclerView.setAdapter(mAdapter);
+                leng = String.valueOf(stockArr.length);
+                label1.setText("Total Scan " + leng + " From " + caseQ);
+
+                if (leng.equals(caseQ)){
+                    errorLabel.setText("Dispatch Complete For This Brand");
+                    errorLabel.setBackgroundResource(R.color.colorGreen);
+
+                    dispatchComplete();
+                }
+
+                batchNo.setText("");
+            }
+
+
+        }
+    }
+
+    // update is_dispatch when product dispatch is complete
+    public void dispatchComplete() {
+        String  query = "update dispatch set is_dispatched='1' where Dispatch_no = '" + disNo + "'";
+        new Dispatch.loadPrintServerPostRequest(query).execute();
+
+    }
+    private class loadPrintServerPostRequest extends AsyncTask<String, Integer, String> {
+
+        String query;
+        String caseNoo = null;
+        String errorR = null,exceptionn;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        public loadPrintServerPostRequest(String query){
+            this.query=query;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+                String url = "jdbc:mysql://" + sqlips + ":" + sqlports + "/" + sqldatabases;
+                ActivityCompat.requestPermissions(Dispatch.this, new String[]{Manifest.permission.INTERNET}, PackageManager.PERMISSION_GRANTED);
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                try {
+                    Class.forName(Config.Classes);
+                    connection = DriverManager.getConnection(url, sqlusernames, sqlpasswords);
+                    Statement statement1 = (Statement) connection.createStatement();
+                    statement1.executeUpdate(query);
+
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException throwables) {
+                    exceptionn = throwables.getMessage();
+                    errorR = "err"+exceptionn;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return errorR;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
+
+    String case_countt,casees = null,is_aggregated,plantId;
+    String db_label_id = null;
+    String unit_id = null;
+    String dispatch_id = null,scanDt_time=null,mfDate=null;
+    String db_brand_id = null;
+    String queryy,chek;
+    private class AddCasePostRequest extends AsyncTask<String, Integer, String> {
+        String  Caseno,  DispID,  DetailID,  BrandID,UnitID, LabelID, fy;
+        String msg;
+
+        public AddCasePostRequest(String Caseno, String DispID,String BrandId){
+            this.Caseno=Caseno;
+            this.DispID=DispID;
+            this.BrandID = BrandId;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if(SelectedTypes.equals("foreign liquor")){
+                String url = "jdbc:mysql://" + sqlips + ":" + sqlports + "/" + sqldatabases;
+                ActivityCompat.requestPermissions(Dispatch.this, new String[]{Manifest.permission.INTERNET}, PackageManager.PERMISSION_GRANTED);
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                try {
+                    Class.forName(Config.Classes);
+                    connection = DriverManager.getConnection(url, sqlusernames, sqlpasswords);
+                    String query;
+                    if (activitys.equals("mapped")) {
+                        query = "SELECT * from case_details where case_no ='" + last18Digits + "'";
+
+                    } else {
+                        query = "SELECT * from um_case_details where case_no ='" + last18Digits + "'";
+                    }
+                    Statement statement = (Statement) connection.createStatement();
+                    ResultSet result = statement.executeQuery(query);
+
+                    while (result.next()) {
+                        if (activitys.equals("mapped")) {
+                            db_brand_id = result.getString("product_id");
+                            dispatch_id = result.getString("dispatch_id");
+                            scanDt_time = result.getString("scan_datetime");
+                            casees = result.getString("case_no");
+                            is_aggregated = result.getString("is_aggregated");
+                            plantId = result.getString("plant_id");
+                            System.out.println("case exist " + casees);
+                            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" + dispatch_id);
+                        } else {
+                            db_brand_id = result.getString("product_id");
+                            dispatch_id = result.getString("dispatch_id");
+                            scanDt_time = result.getString("scan_datetime");
+                            plantId = result.getString("plant_id");
+                            is_aggregated = result.getString("is_aggregated");
+                            casees = result.getString("case_no");
+                            System.out.println("case exist " + casees);
+                            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" + dispatch_id);
+                        }
+
+                    }
+                    if (casees !=null) {
+                        if (plant_id.equals(plantId)) {
+                            if (!is_aggregated.equals("0")) {
+
+                                if (BrandID.equals(db_brand_id)) {
+
+                                    if (dispatch_id == null) {
+
+                                        if (!leng.equals(caseQ)) {
+
+                                            if (activitys.equals("mapped")) {
+                                                String sql_update_agg = "update case_details set dispatch_id = '" + DispID + "',is_dispatched='1' where case_no = '" + Caseno + "';";
+                                                Statement statement1 = (Statement) connection.createStatement();
+                                                statement1.executeUpdate(sql_update_agg);
+                                            } else {
+                                                String sql_update_agg = "update um_case_details set dispatch_id = '" + DispID + "',is_dispatched='1' where case_no = '" + Caseno + "';";
+                                                Statement statement1 = (Statement) connection.createStatement();
+                                                statement1.executeUpdate(sql_update_agg);
+                                            }
+                                            msg = "Case Dispatch Successfully";
+                                            casees = null;
+                                        } else {
+                                            msg = "Dispatch Completed Can't Add more in this Brand";
+
+                                        }
+
+
+                                    } else {
+
+                                        msg = "Already Dispatched";
+                                        casees = null;
+                                    }
+
+                                } else {
+                                    msg = "Brand mismatch";
+                                }
+
+                            } else {
+                                msg = "Aggrigation not done for this case no";
+                            }
+                        } else {
+                            msg = "Plant Mismatch";
+
+                        }
+                    }
+                    else {
+                        msg = "Case Not Available";
+                    }
+
+
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+
+            }
+
+            return msg;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(s.equals("Aggrigation not done for this case no")){
+                errorLabel.setText("Aggregation not done for this case no\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+
+            }
+            else if(s.equals("Case Dispatch Successfully")){
+
+                errorLabel.setText("Case Dispatch Successfully\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.colorGreen);
+                Helpers.ScanOk();
+                batchNo.setText("");
+                batchNo.requestFocus();
+                loadList(DispID);
+
+
+
+            }
+
+            else if(s.equals("Case Not Available")){
+
+                errorLabel.setText("Case Not Available\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+                loadList(DispID);
+
+            }
+
+            else if(s.equals("Plant Mismatch")){
+
+                errorLabel.setText("Plant Mismatch\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+                loadList(DispID);
+
+            }
+
+            else if(s.equals("Industry code mismatch")){
+                errorLabel.setText("Industry code mismatch\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+
+            }
+
+            else if(s.equals("Dispatch Completed Can't Add more in this Brand")){
+                errorLabel.setText("Dispatch Completed Can't Add more in this Brand\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+
+            } else if(s.equals("Already Dispatched")){
+                errorLabel.setText("Already Dispatched\n"+last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+                casees =null;
+            }
+
+            else if(s.equals("Brand mismatch")){
+                errorLabel.setText("Product Id Mismatch\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+            }
+
+            else if(s.equals("Year mismatch")){
+                errorLabel.setText("Year Mismatch\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+
+            }
+
+            else if(s.equals("Month mismatch")){
+                errorLabel.setText("Month Mismatch\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+
+            }
+
+            else if(s.equals("ManufactureId Mismatch")){
+                errorLabel.setText("ManufactureId Mismatch\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+
+            }
+
+            else if(s.equals("packingCode Mismatch")){
+                errorLabel.setText("PackingCode Mismatch\n" + last18Digits);
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+
+            }
+
+            else if(s.equals("Dispatch completed")){
+                errorLabel.setText("Dispatch completed");
+                errorLabel.setBackgroundResource(R.color.red);
+                Helpers.ScanError();
+                batchNo.setText("");
+                batchNo.requestFocus();
+
+            }
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+}

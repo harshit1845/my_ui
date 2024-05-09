@@ -1,0 +1,6 @@
+1. correction in company getcompany info api as per smit sir disscution
+
+2. message validation sheet - aggregation and dispatch  
+
+3. in productbind api no batch avilable in product this product is not show in responce
+
